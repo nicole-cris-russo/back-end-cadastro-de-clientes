@@ -1,3 +1,5 @@
+import { Request } from "express"
+
 export interface IUserRequest {
     fullName: string
     email: string
@@ -8,6 +10,15 @@ export interface IUserPatch {
     fullName?: string
     email?: string
     password?: string
+}
+
+export interface ISessionRequest {
+    email: string
+    password: string
+}
+
+export interface ITokenResponse {
+    token: string
 }
 
 export interface IClientRequest {
@@ -36,7 +47,7 @@ export interface IContactPatch {
 
 export interface CustomRequest extends Request {
     user?: {
-        id: string
-        isAdm: boolean
+        id?: string
+        isAdm?: boolean
     }
 }
