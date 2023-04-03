@@ -23,9 +23,9 @@ export class Client {
     @UpdateDateColumn()
     updated_at: Date
 
-    @ManyToOne(() =>  User, {eager: true, cascade: true})
+    @ManyToOne(() =>  User, (user) => user.clients, {eager: true})
     user: User
 
-    @OneToMany(() => Contact, (contact) => {contact.client}, {cascade: true})
+    @OneToMany(() => Contact, (contact) => contact.client, {cascade: true})
     contacts: Contact[]
 }

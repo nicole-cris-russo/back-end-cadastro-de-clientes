@@ -17,6 +17,6 @@ clientRouter.get("/:idClient", idNotFoundMiddleware, notAdmMiddleware, ClientCon
 
 clientRouter.get("/:idClient/contacts", idNotFoundMiddleware, notAdmMiddleware, ClientController.contactsByClient)
 
-clientRouter.delete("/:idClient", idNotFoundMiddleware, notAdmMiddleware, ClientController.post)
+clientRouter.delete("/:idClient", idNotFoundMiddleware, notAdmMiddleware, ClientController.delete)
 
 export default clientRouter

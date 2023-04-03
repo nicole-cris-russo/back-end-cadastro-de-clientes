@@ -19,7 +19,7 @@ export default class ClientService {
             user: user
         })
 
-        await userRepository.save(clientCreated)
+        await clientRepository.save(clientCreated)
 
         return clientCreated
     }
@@ -64,9 +64,8 @@ export default class ClientService {
 
     static async delete (idClient: string): Promise<void> {
         const clientRepository = PostgresDataSource.getRepository(Client)
-        const client = await clientRepository.findOneBy({id: idClient})
         try {
-            await clientRepository.delete(client)
+            await clientRepository.delete({id: idClient})
         } catch (error) {
             throw new AppError("Erro ao deletar o cliente", 400)
         }

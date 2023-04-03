@@ -14,9 +14,9 @@ userRouter.patch("/:idUser", authTokenMiddleware, idNotFoundMiddleware, notAdmMi
 
 userRouter.get("/:idUser", authTokenMiddleware, idNotFoundMiddleware, notAdmMiddleware, UserController.userId)
 
-userRouter.get("/:idUser/clients", authTokenMiddleware, idNotFoundMiddleware, notAdmMiddleware, UserController.clientsByUser)
-
 userRouter.get("", authTokenMiddleware, isAdmMiddleware, UserController.userAll)
+
+userRouter.get("/:idUser/clients", authTokenMiddleware, idNotFoundMiddleware, notAdmMiddleware, UserController.clientsByUser)
 
 userRouter.delete("/:idUser", authTokenMiddleware, idNotFoundMiddleware, notAdmMiddleware, UserController.delete)
 

@@ -23,6 +23,6 @@ export class Contact {
     @UpdateDateColumn()
     updated_at: Date
 
-    @ManyToOne(() => Client, {eager: true, cascade: true})
+    @ManyToOne(() => Client, (client) => client.contacts, {eager: true})
     client: Client
 }

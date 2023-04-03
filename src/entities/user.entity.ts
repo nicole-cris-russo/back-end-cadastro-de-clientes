@@ -13,7 +13,7 @@ export class User {
     @Column({length: 80})
     email: string
 
-    @Column({length: 12})
+    @Column({length: 80})
     password: string
 
     @Column({default: false})
@@ -25,6 +25,6 @@ export class User {
     @UpdateDateColumn()
     updated_at: Date
 
-    @OneToMany(()=> Client, (client) => {client.user}, {cascade: true})
+    @OneToMany(()=> Client, client => client.user, {cascade: true})
     clients: Client[]
 }

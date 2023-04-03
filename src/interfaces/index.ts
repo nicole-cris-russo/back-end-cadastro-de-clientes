@@ -4,6 +4,7 @@ export interface IUserRequest {
     fullName: string
     email: string
     password: string
+    isAdm: boolean
 }
 
 export interface IUserPatch {

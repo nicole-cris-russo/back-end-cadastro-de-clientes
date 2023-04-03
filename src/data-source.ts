@@ -10,15 +10,17 @@ export const PostgresDataSource = new DataSource (
         password: process.env.PASSWORD,
         database: process.env.DATABASE,
         synchronize: false,
-        logging: true,
+        logging: false,
         entities: ["src/entities/*.ts"],
         migrations: ["src/migrations/*.ts"],
     }
 )
 
+const port = process.env.PORT || 3333
+
 PostgresDataSource.initialize()
     .then(() => {
-        app.listen(3333, () => {
+        app.listen(port, () => {
             console.log("Banco de dados inicializado!")
         })
     })

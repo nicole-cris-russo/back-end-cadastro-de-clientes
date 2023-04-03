@@ -63,9 +63,8 @@ export default class ContactService {
 
     static async delete (idContact: string): Promise<void> {
         const contactRepository = PostgresDataSource.getRepository(Contact)
-        const contact = await contactRepository.findOneBy({id: idContact})
         try {
-            await contactRepository.delete(contact)
+            await contactRepository.delete({id: idContact})
         } catch (error) {
             throw new AppError("Erro ao deletar o Contacte", 400)
         }

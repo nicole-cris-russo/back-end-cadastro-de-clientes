@@ -6,8 +6,11 @@ import { Client } from "../entities/client.entity";
 import { User } from "../entities/user.entity";
 
 export const notAdmMiddleware = async (request: CustomRequest, response: Response, next: NextFunction) => {
-    const { idUser, idClient, idContact } = request.params
-    const { id, isAdm } = request.user
+    const idUser = request.params.idUser
+    const idClient = request.params.idClient
+    const idContact = request.params.idContact
+    const id = request.user.id
+    const isAdm = request.user.isAdm
     if (idUser) {
         if (idUser !== id && !isAdm) {
             throw new AppError("Usuário não autorizado (notadm)", 401)
