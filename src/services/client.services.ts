@@ -1,68 +1,74 @@
+import { IClientPatch, IClientRequest } from "../interfaces";
 import { PostgresDataSource } from "../data-source";
-import { Client } from "../entities/client.entity";
 import { AppError } from "../errors";
-import { hash } from "bcrypt";
+import { Contact } from "../entities/contact.entity";
+import { Client } from "../entities/client.entity";
+import { User } from "../entities/user.entity";
 
 export default class ClientService {
-    static async post (userRequest: IUserRequest): Promise<User> {
+    static async post (clientRequest: IClientRequest, idUserToken: string): Promise<Client> {
         const userRepository = PostgresDataSource.getRepository(User)
+        const clientRepository = PostgresDataSource.getRepository(Client)
 
-        const userCreated = userRepository.create({
-            fullName: userRequest.fullName,
-            email: userRequest.email,
-            password: await hash(userRequest.password, 15)
+        const user = await userRepository.findOneBy({id: idUserToken})
+
+        const clientCreated = clientRepository.create({
+            fullName: clientRequest.fullName,
+            email: clientRequest.email,
+            phone: clientRequest.phone,
+            user: user
         })
 
-        await userRepository.save(userCreated)
+        await userRepository.save(clientCreated)
 
-        return userCreated
+        return clientCreated
     }
 
-    static async patch (userRequest: IUserPatch, idUser: string): Promise<User> {
-        const userRepository = PostgresDataSource.getRepository(User)
-        const user = await userRepository.findOneBy({id: idUser})
+    static async patch (clientRequest: IClientPatch, idClient: string): Promise<Client> {
+        const clientRepository = PostgresDataSource.getRepository(Client)
+        const client = await clientRepository.findOneBy({id: idClient})
         
-        await userRepository.update(idUser, {
-            fullName: userRequest.fullName ? userRequest.fullName : user.fullName,
-            email: userRequest.email ? userRequest.email : user.email,
-            password: userRequest.password ? await hash(userRequest.password, 15) : user.password
+        await clientRepository.update(idClient, {
+            fullName: clientRequest.fullName ? clientRequest.fullName : client.fullName,
+            email: clientRequest.email ? clientRequest.email : client.email,
+            phone: clientRequest.phone ? clientRequest.phone : client.phone
         })
 
-        const userUpdated = await userRepository.findOneBy({id: idUser})
-        return userUpdated
+        const clientUpdated = await clientRepository.findOneBy({id: idClient})
+
+        return clientUpdated
     }   
 
-    static async userId (idUser: string): Promise<User> {
-        const userRepository = PostgresDataSource.getRepository(User)
-        const users = await userRepository.find({relations: {
-            clients: true
+    static async clientId (idClient: string): Promise<Client> {
+        const clientRepository = PostgresDataSource.getRepository(Client)
+        const clients = await clientRepository.find({relations: {
+            user: true, contacts: true
         }})
-        const user = users.find(user => user.id == idUser)
-        return user
+        const client = clients.find(client => client.id == idClient)
+        return client
     }
 
-    static async userAll (): Promise<User[]> {
-        const userRepository = PostgresDataSource.getRepository(User)
-        const users = await userRepository.find()
-        return users
+    static async clientsAll (): Promise<Client[]> {
+        const clientRepository = PostgresDataSource.getRepository(Client)
+        const clients = await clientRepository.find()
+        return clients
     }
 
-    static async clientsByUser (idUser: string): Promise<Client[]> {
-        const userRepository = PostgresDataSource.getRepository(User)
-        const users = await userRepository.find({relations: {
-            clients: true
-        }})
-        const user = users.find(user => user.id == idUser)
-        return user.clients
+    static async contactsByClient (idClient: string): Promise<Contact[]> {
+        const clientRepository = PostgresDataSource.getRepository(Client)
+        const clients = await clientRepository.find({relations: {contacts: true}})
+        const client = clients.find(client => client.id === idClient)
+
+        return client.contacts
     }
 
-    static async delete (idUser: string): Promise<void> {
-        const userRepository = PostgresDataSource.getRepository(User)
-        const user = await userRepository.findOneBy({id: idUser})
+    static async delete (idClient: string): Promise<void> {
+        const clientRepository = PostgresDataSource.getRepository(Client)
+        const client = await clientRepository.findOneBy({id: idClient})
         try {
-            await userRepository.delete(user)
+            await clientRepository.delete(client)
         } catch (error) {
-            throw new AppError("Erro ao deletar o usuário", 400)
+            throw new AppError("Erro ao deletar o cliente", 400)
         }
     }
 }

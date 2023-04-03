@@ -1,6 +1,6 @@
 import { PostgresDataSource } from "../data-source";
 import { AppError } from "../errors";
-import { compare, hash } from "bcrypt";
+import { compare } from "bcrypt";
 import { ISessionRequest, ITokenResponse } from "../interfaces";
 import { User } from "../entities/user.entity";
 import jwt from "jsonwebtoken"
