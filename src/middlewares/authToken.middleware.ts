@@ -1,12 +1,14 @@
 import { Response, NextFunction } from "express";
 import { AppError } from "../errors";
 import { CustomRequest } from "../interfaces";
-import jwt, { VerifyErrors } from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 import "dotenv/config"
 
 export const authTokenMiddleware = (request: CustomRequest, response: Response, next: NextFunction) => {
 
-    const token = request.headers.authorization
+    const tokenBearer = request.headers.authorization
+
+    const token = tokenBearer.split(" ")[1]
 
     if (!token) {
         throw new AppError("Token inválido", 401)

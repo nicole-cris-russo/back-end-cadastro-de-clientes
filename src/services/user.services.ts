@@ -41,6 +41,13 @@ export default class UserService {
         return userUpdated
     }   
 
+    static async getProfile (idToken: string): Promise<User> {
+        const userRepository = PostgresDataSource.getRepository(User)
+        const users = await userRepository.find({relations: {clients: true}})
+        const user =  users.find(user => user.id == idToken)
+        return user
+    }
+
     static async userId (idUser: string): Promise<User> {
         const userRepository = PostgresDataSource.getRepository(User)
         const users = await userRepository.find({relations: {
@@ -54,6 +61,13 @@ export default class UserService {
         const userRepository = PostgresDataSource.getRepository(User)
         const users = await userRepository.find()
         return users
+    }
+
+    static async userClients (idToken: string): Promise<Client[]> {
+        const clientRepository = PostgresDataSource.getRepository(Client)
+        const clients = await clientRepository.find({relations: {contacts: true, user: true}})
+        const clientsByItToken = clients.filter(client => client.user.id === idToken)
+        return clientsByItToken
     }
 
     static async clientsByUser (idUser: string): Promise<Client[]> {

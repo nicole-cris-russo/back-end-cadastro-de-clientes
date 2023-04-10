@@ -27,8 +27,7 @@ export default class SessionService {
             throw new AppError("Email ou senha inválidos", 401)
         }
 
-        const tokenResponse = {
-            token: jwt.sign(
+        const tokenResponse = jwt.sign(
                 {
                     id: user.id,
                     isAdm: user.isAdm,
@@ -39,8 +38,9 @@ export default class SessionService {
                     subject: user.id
                 }
             )
-        }
 
-        return tokenResponse
+        const authTokenResponse = {token: `Bearer ${tokenResponse}`}
+
+        return authTokenResponse
     }
 }

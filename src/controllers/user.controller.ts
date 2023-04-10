@@ -15,6 +15,12 @@ export default class UserController {
         return response.json(userUpdated).status(200)
     }
 
+    static async userProfile (request: CustomRequest, response: Response) {
+        const idToken: string = request.user.id
+        const userProfile = await UserService.getProfile(idToken)
+        return response.json(userProfile).status(200) 
+    }
+
     static async userId (request: CustomRequest, response: Response) {
         const idUser: string = request.params.idUser
         const user = await UserService.userId(idUser)
@@ -24,6 +30,12 @@ export default class UserController {
     static async userAll (request: CustomRequest, response: Response) {
         const users = await UserService.userAll()
         return response.json(users).status(200)
+    }
+
+    static async userClients (request: CustomRequest, response: Response) {
+        const idToken: string = request.user.id
+        const userClients = await UserService.userClients(idToken)
+        return response.json(userClients).status(200) 
     }
 
     static async clientsByUser (request: CustomRequest, response: Response) {

@@ -4,12 +4,13 @@ import { isAdmMiddleware } from "../middlewares/isAdm.middleware";
 import { idNotFoundMiddleware } from "../middlewares/idNotFound.middleware";
 import { fieldsContactClientMiddleware } from "../middlewares/fieldsContactClient.middleware";
 import { notAdmMiddleware } from "../middlewares/notAdm.middleware";
+import { nameAlreadyExistsMiddleware } from "../middlewares/nameAlreadyExists.middleware";
 
 const clientRouter = Router()
 
-clientRouter.post("", fieldsContactClientMiddleware, notAdmMiddleware, ClientController.post)
+clientRouter.post("", fieldsContactClientMiddleware, notAdmMiddleware, nameAlreadyExistsMiddleware, ClientController.post)
 
-clientRouter.patch("/:idClient", fieldsContactClientMiddleware, idNotFoundMiddleware, notAdmMiddleware, ClientController.patch)
+clientRouter.patch("/:idClient", fieldsContactClientMiddleware, idNotFoundMiddleware, notAdmMiddleware, nameAlreadyExistsMiddleware, ClientController.patch)
 
 clientRouter.get("", isAdmMiddleware, ClientController.clientAll)
 
